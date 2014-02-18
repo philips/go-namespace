@@ -39,6 +39,9 @@ func ListenProcessNamespace(pid uintptr, net, laddr string) (gnet.Listener, erro
 // ListenNamespace creates a net.Listener in the namespace of the given namespace path.
 // The arguments are identical to net.Listen.
 func ListenNamespace(nsPath string, net, laddr string) (gnet.Listener, error) {
+	if nsPath == "" {
+		return gnet.Listen(net, laddr)
+	}
 	fd, err := namespace.Open(nsPath)
 	defer namespace.Close(fd)
 	if err != nil {
